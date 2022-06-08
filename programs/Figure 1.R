@@ -1,8 +1,9 @@
 library(viridisLite)
 library(ggplot2)
+library(tidyverse)
 
 ##Figure 1 Spatial distribution of outbreaks reported at sub-national administrative units
-afr_shp=sf::st_read('reference/AfricaShapefiles/afr_g2014_2013_0.shp')#from open AFrica
+afr_shp=sf::st_read('reference_data/AfricaShapefiles/afr_g2014_2013_0.shp')#from open AFrica
 total_shp=sf::st_read('reference_data/AfricaShapefiles/total_shp_0427.shp')
 
 colnames(total_shp)[1]="lctn_pr"
@@ -12,11 +13,8 @@ significant_outbreaks=subset(read.csv('reference_data/outbreak_time_to_peak_new_
 )
 all(significant_outbreaks$location_period_id%in%total_shp$lctn_pr)
 
-
 ##change tza mailand from admin1 to admin0
 significant_outbreaks=significant_outbreaks%>%subset(!location=="afr::tza::mainland")
-significant_outbreaks[which(stringr::str_detect(significant_outbreaks$location,"afr::tza::mainland")&significant_outbreaks$spatial_scale=="admin2"),]$spatial_scale="admin1"
-significant_outbreaks[which(stringr::str_detect(significant_outbreaks$location,"afr::tza::mainland")&significant_outbreaks$spatial_scale=="admin3"),]$spatial_scale="admin2"
 
 ##piped locations shps
 significant_outbreaks$spatial_scale=as.character(significant_outbreaks$spatial_scale)
@@ -43,8 +41,8 @@ for (lp_id in unique(significant_outbreaks[which(significant_outbreaks$location_
   total_shp[which(total_shp$lctn_pr==lp_id),]$spatial_level=unique(significant_outbreaks[which(significant_outbreaks$location_period_id==lp_id),]$spatial_scale)
   total_shp[which(total_shp$lctn_pr==lp_id),]$outbreak='Yes'
 }
-table(total_shp$outbreak)
 
+total_shp[which(is.na(total_shp$spatial_level)),]$spatial_level="country"
 total_shp$spatial_level=factor(total_shp$spatial_level,levels = c('country','admin1','admin2','admin3'))
 country_total_shp=total_shp[which(total_shp$spatial_level=='country'),]
 
@@ -69,7 +67,7 @@ admin3_non_piped_shp=total_shp[which(total_shp$spatial_level=='admin3'&
 
 #select admin3 eth outbreaks
 eth_admin3_shp=unique(significant_outbreaks[which(significant_outbreaks$spatial_scale=="admin3"&significant_outbreaks$country=="ETH"),]$location_period)
-afr_country_shp=sf::st_read("generated_data/population/country_shps.shp")
+afr_country_shp=sf::st_read("reference_data/AfricaShapefiles/country_shps.shp")
 
 ggplot() +
   geom_sf(data=afr_shp,color='black',fill='white')+
