@@ -29,7 +29,6 @@ heatmap_data=tidyr::unite(heatmap_data,
                           sep='-')
 heatmap_data$year_month=format(lubridate::ymd(heatmap_data$year_month),'%Y-%m')
 
-### Figure 3
 heatmap_data=read.csv('reference_data/heatmap_data_new_definition1.csv')
 heatmap_data$year=as.integer(substr(heatmap_data$year_month,1,4))
 heatmap_data=heatmap_data[which(
