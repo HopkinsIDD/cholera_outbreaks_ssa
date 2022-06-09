@@ -2,7 +2,7 @@
 library(ggplot2)
 library(tidyverse)
 
-significant_outbreaks=subset(read.csv('reference_data/outbreak_time_to_peak_new_definition1.csv',encoding="UTF-8"),EpiPeriod=='complete' &!spatial_scale=="country")
+significant_outbreaks=subset(read.csv('reference_data/outbreak_data.csv',encoding="UTF-8"),EpiPeriod=='complete' &!spatial_scale=="country")
 
 heatmap_data=data.frame(
   country=sort(rep(sort(unique(significant_outbreaks$country)),12*(2020-2010+1))),
@@ -29,7 +29,7 @@ heatmap_data=tidyr::unite(heatmap_data,
                           sep='-')
 heatmap_data$year_month=format(lubridate::ymd(heatmap_data$year_month),'%Y-%m')
 
-heatmap_data=read.csv('reference_data/heatmap_data_new_definition1.csv')
+heatmap_data=read.csv('reference_data/heatmap_data.csv')
 heatmap_data$year=as.integer(substr(heatmap_data$year_month,1,4))
 heatmap_data=heatmap_data[which(
   heatmap_data$year<=2019|
@@ -49,7 +49,6 @@ location_period_pop=read.csv('reference_data/country_location_period_pop.csv')
 ##match the country-level population to the heatmap_data
 heatmap_data$year=lubridate::year(as.Date(paste0(heatmap_data$year_month,'-01')))
 heatmap_data1=merge(heatmap_data,location_period_pop,by=c('country','year'),all.x = T)
-
 nrow(heatmap_data)==nrow(heatmap_data1)
 
 heatmap_data1$outbreak_population_proportion=100*heatmap_data1$outbreak_pop/heatmap_data1$population
