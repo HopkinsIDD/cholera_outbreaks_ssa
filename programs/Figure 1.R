@@ -7,10 +7,11 @@ afr_shp=sf::st_read('reference_data/AfricaShapefiles/afr_g2014_2013_0.shp')#from
 total_shp=sf::st_read('reference_data/AfricaShapefiles/total_shp_0427.shp')
 
 colnames(total_shp)[1]="lctn_pr"
-significant_outbreaks=subset(read.csv('reference_data/outbreak_time_to_peak_new_definition1.csv',encoding="UTF-8"),
+significant_outbreaks=subset(read.csv('reference_data/outbreak_data.csv',encoding="UTF-8"),
                              EpiPeriod=='complete' &
                                !spatial_scale=="country"
 )
+
 all(significant_outbreaks$location_period_id%in%total_shp$lctn_pr)
 
 ##change tza mailand from admin1 to admin0
