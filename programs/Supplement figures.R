@@ -1038,7 +1038,6 @@ selected_dup_outbreak_data[which(selected_dup_outbreak_data$location=="afr::eth:
 selected_dup_outbreak_data[which(selected_dup_outbreak_data$location=="afr::eth::tigray::northwesterntigray::tahitayadiyabo"),]$location="Tahitay Adiyabo in North Western tigray in tigray region in Ethopia"
 selected_dup_outbreak_data[which(selected_dup_outbreak_data$location=="afr::eth::tigray::northwesterntigray::tahitaykoraro"),]$location="Tahitay Koraro in North Western tigray in tigray region in Ethopia"
 selected_dup_outbreak_data[which(selected_dup_outbreak_data$location=="afr::eth::tigray::northwesterntigray::tselemti"),]$location="Tselemti in North Western tigray in tigray region in Ethopia"
-unique(selected_dup_outbreak_data$location)
 
 selected_dup_outbreak_data=dup_outbreak_data[which(dup_outbreak_data$dup_id==74),]
 selected_dup_outbreak_data[which(selected_dup_outbreak_data$location=="afr::eth::amhara::southgondar"),]$location='South Gondar in Amhara region in Ethopia'
@@ -1051,12 +1050,11 @@ selected_dup_outbreak_data[which(selected_dup_outbreak_data$location=="afr::cod:
 selected_dup_outbreak_data[which(selected_dup_outbreak_data$location=="afr::cod::nordkivu::karisimbihealthdistrict::majengo"),]$location="Majengo in Karisimbi Health District in Nord-Kivu region in Democratic Republic of Congo"
 
 for (id in unique(selected_dup_outbreak_data[which(!selected_dup_outbreak_data$dup_id%in%selected_dup_outbreak_data[which(selected_dup_outbreak_data$spatial_scale=='admin1'),]$dup_id),]$dup_id)) {
-  #id=10
-  try=selected_dup_outbreak_data[selected_dup_outbreak_data$dup_id==id,]
-  try$location=as.factor(try$location)
-  density_ridge_data=as.data.frame(lapply(try, rep, try$sCh))
+  single_selected_dup_outbreak_data=selected_dup_outbreak_data[selected_dup_outbreak_data$dup_id==id,]
+  single_selected_dup_outbreak_data$location=as.factor(single_selected_dup_outbreak_data$location)
+  density_ridge_data=as.data.frame(lapply(single_selected_dup_outbreak_data, rep, single_selected_dup_outbreak_data$sCh))
   
-  if(unique(try$temporal_scale=='daily')){
+  if(unique(single_selected_dup_outbreak_data$temporal_scale=='daily')){
     ytitle='Reported suspected cases per day'
     bar_length=1
   }else{
@@ -1064,14 +1062,14 @@ for (id in unique(selected_dup_outbreak_data[which(!selected_dup_outbreak_data$d
     bar_length=7
   }
   
-  date_limits=c(min(try$TL),max(try$TL))
+  date_limits=c(min(single_selected_dup_outbreak_data$TL),max(single_selected_dup_outbreak_data$TL))
   
-  y_limits=c(0,max(try$sCh))
+  y_limits=c(0,max(single_selected_dup_outbreak_data$sCh))
   y_breaks=round(seq(y_limits[1],y_limits[2],length=5),0)
   
   figure1=
     ggplot2::ggplot() + 
-    ggplot2::geom_bar(data=try[which(try$spatial_scale=='admin2'),],ggplot2::aes(x=TL,y=sCh,fill=location),width=bar_length,stat="identity", colour='black')+
+    ggplot2::geom_bar(data=single_selected_dup_outbreak_data[which(single_selected_dup_outbreak_data$spatial_scale=='admin2'),],ggplot2::aes(x=TL,y=sCh,fill=location),width=bar_length,stat="identity", colour='black')+
     scale_x_date(date_labels = "%Y-%m",limits = date_limits,breaks= "1 month")+
     scale_y_continuous(limits=y_limits,breaks=y_breaks)+
     ggplot2::theme_bw()+
@@ -1089,7 +1087,7 @@ for (id in unique(selected_dup_outbreak_data[which(!selected_dup_outbreak_data$d
   
   figure2=
     ggplot2::ggplot() + 
-    ggplot2::geom_bar(data=try[which(try$spatial_scale=='admin3'),],ggplot2::aes(x=TL,y=sCh,width=date_range,fill=location),stat="identity", colour='black')+
+    ggplot2::geom_bar(data=single_selected_dup_outbreak_data[which(single_selected_dup_outbreak_data$spatial_scale=='admin3'),],ggplot2::aes(x=TL,y=sCh,width=date_range,fill=location),stat="identity", colour='black')+
     scale_x_date(date_labels = "%Y-%m",limits = date_limits,breaks= "1 month")+
     scale_y_continuous(limits = y_limits,breaks=y_breaks)+
     ggplot2::theme_bw()+
