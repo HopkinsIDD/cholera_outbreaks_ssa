@@ -1031,6 +1031,9 @@ peak
 
 ##Supplement figure 5
 dup_outbreak_data<-read.csv("reference_data/Supplement_figure_75_77.csv")
+dup_outbreak_data$TL<-as.Date(dup_outbreak_data$TL,origin="1996-01-01")
+dup_outbreak_data$TR<-as.Date(dup_outbreak_data$TR,origin="1996-01-01")
+
 selected_dup_outbreak_data=dup_outbreak_data[which(dup_outbreak_data$dup_id==66),]
 selected_dup_outbreak_data[which(selected_dup_outbreak_data$location=="afr::eth::tigray::northwesterntigray"),]$location='Northwestern tigray in tigray region in Ethopia'
 selected_dup_outbreak_data[which(selected_dup_outbreak_data$location=="afr::eth::tigray::northwesterntigray::asgedetsimbila"),]$location='Asgede Tsimbla in North Western tigray in tigray region in Ethopia'
@@ -1104,4 +1107,3 @@ for (id in unique(selected_dup_outbreak_data[which(!selected_dup_outbreak_data$d
     guides(fill=guide_legend(nrow=2,byrow=T))
   gridExtra::grid.arrange(figure1,figure2,ncol=1)
 }
-dev.off()
