@@ -18,8 +18,6 @@ heatmap_data=data.frame(
   outbreak_duration=0,
   total_pop=0,
   outbreak_pop=0,
-  outbreak_pop_censored=0,
-  outbreak_number=0,
   outbreak_sl=NA
 )
 
@@ -52,7 +50,6 @@ heatmap_data1=merge(heatmap_data,location_period_pop,by=c('country','year'),all.
 nrow(heatmap_data)==nrow(heatmap_data1)
 
 heatmap_data1$outbreak_population_proportion=100*heatmap_data1$outbreak_pop/heatmap_data1$population
-heatmap_data1$outbreak_population_proportion_censored=100*heatmap_data1$outbreak_pop_censored/heatmap_data1$population
 
 heatmap_data1[which(heatmap_data1$has_data=='no data'),]$outbreak_population_proportion=NA
 
@@ -120,16 +117,8 @@ for (country in unique(heatmap_data1$country)) {
 }
 
 heatmap_data1=rbind(heatmap_data1,add_rec)
-heatmap_data1=heatmap_data1[with(heatmap_data1,order(heatmap_data1$outbreak_pop_censored)),]
 
-heatmap_data2=heatmap_data1%>%
-  group_by(country)%>%
-  summarise(
-    total_coverage=length(outbreak_population_proportion_censored[is.na(outbreak_population_proportion_censored)==F]),
-    total_outbreak=length(outbreak_population_proportion_censored[is.na(outbreak_population_proportion_censored)==F&outbreak_population_proportion>0])
-    
-  )
-country_list=unique(heatmap_data2[with(heatmap_data2,order(heatmap_data2$total_outbreak,decreasing = T)),]$country)
+country_list=unique(heatmap_data1[with(heatmap_data1,order(heatmap_data1$total_outbreak,decreasing = T)),]$country)
 
 ggplot(data=heatmap_data1[heatmap_data1$group==1,],aes(x=new_year_month, y=country)) +
   geom_tile(aes(fill=outbreak_population_proportion_censored,
