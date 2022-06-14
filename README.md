@@ -30,10 +30,33 @@ This repository provides the data and source code for the following paper: Qulu 
 **2. Summarized characteristics of cholera outbreaks from 2010 through 2019 in the sensitivity analysis: reference_data/outbreak_data_sensitivity_analysis.csv**
 * column names are the same as above. 
 **3. Processed monthly time series of population data from 2010 through 2019: reference_data/heatmap_data.csv**
-* country: the ISO 3166 country codes.
-* year_month: 
+* _country_: the ISO 3166 country codes.
+* _year_month_: each row represents a month of a specific year between 2010-2019
+* _has_data_: whether we have time series data in the global cholera incidence database.
+* _outbreak_sCh_: whether there are outbreak-related suspected cholera case data in that month of a specific year.
+* _outbreak_deaths_: whether there are outbreak-related cholera death data in that month of a specific year.
+* _outbreak_cCh_: whether there are outbreak-related confirmed cholera case data in that month of a specific year.
+* _outbreak_duration_: the duration of an outbreak.
+* _total_pop_: the total population in that region within that time period.
+* _outbreak_pop_: the population in that region within that time period.
+* _outbreak_sl_: the spatial scale of the outbreak. 
 6. Processed location and population data: reference_data/country_location_period_pop.csv. 
-7. Processed data for supplement figures 75_77: reference_data/Supplement_figure_75_77.csv
+* country: the name of the country.
+* year: the year when the outbreak was reported.
+* _location_period_id_: the location period id that are used to link to the shapefiles in global cholera incidence database.
+* _population_: the total population in the region where the outbreak was reported and in the year when the outbreak was detected.
+* _area_: the area of the region where the outbreak was reported.
+* _population_density_: the number of population per km2 in the region where the outbreak was reported.
+_pop_raster_filename_: the name of the raster file 
+8. Processed data for supplement figures 75_77: reference_data/Supplement_figure_75_77.csv
+* TL: the start date of the observation.
+* TR: the end date of the observation.
+* sCh: number of suspected cholera cases reported in that observation.
+* _location_: the name of the location where suspected cholera cases were reported and the name is made up of WHO region, country, and administrative units seperated by "::".
+* _spatial_scale_: the spatial scale of the outbreak, including the first administrative unit ("admin1"), the second administrative unit ("admin2"), and the third administrative unit ("admin3"). 
+* date_range: the length of the time period of the observation.
+* temporal_scale: the temporal scale of the observation.
+* dup_id: the UID of the outbreaks that are overlapped across differnet spatial scales.
 
 ## Code (programs/)
 This folder contains scripts that can generate the figrues in the main text or supplementary material. 
